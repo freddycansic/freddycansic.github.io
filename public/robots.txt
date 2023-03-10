@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 Allow: /
-Sitemap: http://freddycansick.co.uk/sitemap.xml
+Sitemap: https://freddycansick.co.uk/sitemap.xml
