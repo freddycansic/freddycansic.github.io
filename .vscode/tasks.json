@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "zola: build",
+            "type": "shell",
+            "command": "zola build"
+        },
+        {
+            "label": "zola: serve (localhost)",
+            "type": "shell",
+            "command": "zola serve"
+        },
+        {
+            "label": "zola: serve (LAN)",
+            "type": "shell",
+            "command": "zola serve -i $(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\\.){3}[0-9]*' | grep -Eo '([0-9]*\\.){3}[0-9]*' | grep -v '127.0.0.1' | head -n 1)",
+            "problemMatcher": []
+        }
+    ]
+}

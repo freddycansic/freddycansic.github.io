@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Freddy Cansick</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <nav>
+      <a href="/">Home</a> |
+      <a href="/about">About</a> |
+      <a href="/blog">Blog</a>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      
+<div class=centered-container>
+  <h1 class="title">
+    Continuously Deploy Your Website using Github Webhooks
+  </h1>
+  <p class="subtitle">
+    <strong>
+      2023-03-10
+    </strong>
+  </p>
+  <h2 id="introduction">Introduction</h2>
+<p>In modern day software development continuous integration and deployment are becoming increasingly important for an efficient workflow. In this tutorial you will be learning how to set up continuous deployment to update your website source files after a repository push using Github Webhooks.</p>
+<p>Webhooks are callbacks which are triggered by web events. In the case of Github, an event can be a repository push, pull, merge etc. We will be coding a simple PHP script to react to a repository push, which will then pull down the changes and organise them neatly in the web root.</p>
+<hr />
+<p>Assuming you have already set up your web hosting, navigate to your web root. By default it is stored at <code>/var/www/html</code>.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#96b5b4;">cd</span><span> /var/www/html
+</span></code></pre>
+<p>Your project structure should look something like this.</p>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>/var/www/html
+</span><span>├── index.html
+</span><span>├── style.css
+</span><span>└── anything else
+</span></code></pre>
+<p>Now create a folder to store the webhook, and the webhook itself.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">mkdir</span><span> webhooks
+</span><span style="color:#96b5b4;">cd</span><span> webooks
+</span><span style="color:#bf616a;">touch</span><span> webhook.php
+</span></code></pre>
+<p>Open up the webhook in your editor of choice. Of course I will be choosing <code>ed</code>, the world leading standard in text editors for productivity, ease of use and aesthetics. As a wise man once said:</p>
+<blockquote>
+<p>The most user-hostile editor ever created. -Peter H. Salus</p>
+</blockquote>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">ed</span><span> webhook.php
+</span></code></pre>
+<hr />
+<h2 id="webhook">Webhook</h2>
+<p>First of all, Github uses a shared secret to sign their POST requests to your webhook. This verifies that they are genuine and that the message has not been intercepted by a bad actor.</p>
+<p>Your secret can be anything you want, I would recommend a large string of random numbers, letters and characters. Make sure not to memorise this as it could potentially be prised out of you in an interrogation setting. Don't trust anyone. Especially yourself. The human mind is a fragile thing.</p>
+<p>After the <code>&lt;?php</code> opening tag, assign your secret to a variable named <code>$secret</code>. In my example I will use &quot;<code>mydeepestdarkestsecret</code>&quot;. This will be used later on for hashing the payload and checking against Github's signature.</p>
+<pre data-lang="php" style="background-color:#2b303b;color:#c0c5ce;" class="language-php "><code class="language-php" data-lang="php"><span style="color:#ab7967;">&lt;?php
+</span><span>
+</span><span>$</span><span style="color:#bf616a;">secret </span><span>= &#39;</span><span style="color:#a3be8c;">mydeepestdarkestsecret</span><span>&#39;;
+</span></code></pre>
+<p>Now extract the Github event from the request headers.</p>
+<pre data-lang="php" style="background-color:#2b303b;color:#c0c5ce;" class="language-php "><code class="language-php" data-lang="php"><span>$headers = getallheaders();
+</span><span>$event = $headers[&#39;X-Github-Event&#39;];
+</span></code></pre>
+<p>Since we only want to execute our script on <code>push</code>, we can check for this using a  conditional <code>if</code> statement, ignoring everything else including the case where the request does not contain this header at all.</p>
+<pre data-lang="php" style="background-color:#2b303b;color:#c0c5ce;" class="language-php "><code class="language-php" data-lang="php"><span>if ($event == &#39;push&#39;) {
+</span><span>    // update website source
+</span><span>}
+</span></code></pre>
+<p>If we recieved a <code>push</code> event then the next step is to compare our hashed payload with Github's signature.</p>
+<p>First obtain the request payload, then hash it using the <code>secret</code>.</p>
+<pre data-lang="php" style="background-color:#2b303b;color:#c0c5ce;" class="language-php "><code class="language-php" data-lang="php"><span>$payload = file_get_contents(&#39;php://input&#39;);
+</span><span>$our_signature = &#39;sha1=&#39; . hash_hmac(&#39;sha1&#39;, $payload, $secret);
+</span></code></pre>
+<p>Now we can check if the signatures match, running the website source retrieval script if so.</p>
+<pre data-lang="php" style="background-color:#2b303b;color:#c0c5ce;" class="language-php "><code class="language-php" data-lang="php"><span>if ($headers[&#39;X-Hub-Signature&#39;] === $our_signature) {
+</span><span>    exec(&#39;/path/to/your/script&#39;);
+</span><span>}
+</span></code></pre>
+<p>In my experience, calling the script from a separate .sh file works better than simply writing the script in <code>exec()</code>. This is because you can execute the script manually in case the webhook fails or a bug arises.</p>
+<p>Now add the ending PHP tag to finish the script.</p>
+<pre data-lang="php" style="background-color:#2b303b;color:#c0c5ce;" class="language-php "><code class="language-php" data-lang="php"><span>?&gt;
+</span></code></pre>
+<p>So far your code should look like this.</p>
+<pre data-lang="php" style="background-color:#2b303b;color:#c0c5ce;" class="language-php "><code class="language-php" data-lang="php"><span style="color:#ab7967;">&lt;?php
+</span><span>
+</span><span>$</span><span style="color:#bf616a;">secret </span><span>= &#39;</span><span style="color:#a3be8c;">mydeepestdarkestsecret</span><span>&#39;;
+</span><span>$</span><span style="color:#bf616a;">headers </span><span>= </span><span style="color:#96b5b4;">getallheaders</span><span>();
+</span><span>$</span><span style="color:#bf616a;">event </span><span>= $</span><span style="color:#bf616a;">headers</span><span>[&#39;</span><span style="color:#a3be8c;">X-GitHub-Event</span><span>&#39;];
+</span><span>
+</span><span style="color:#b48ead;">if </span><span>($</span><span style="color:#bf616a;">event </span><span>== &#39;</span><span style="color:#a3be8c;">push</span><span>&#39;) {
+</span><span>    $</span><span style="color:#bf616a;">payload </span><span>= </span><span style="color:#96b5b4;">file_get_contents</span><span>(&#39;</span><span style="color:#a3be8c;">php://input</span><span>&#39;);
+</span><span>    $</span><span style="color:#bf616a;">our_signature </span><span>= &#39;</span><span style="color:#a3be8c;">sha1=</span><span>&#39; . </span><span style="color:#96b5b4;">hash_hmac</span><span>(&#39;</span><span style="color:#a3be8c;">sha1</span><span>&#39;, $</span><span style="color:#bf616a;">payload</span><span>, $</span><span style="color:#bf616a;">secret</span><span>);
+</span><span>    </span><span style="color:#b48ead;">if </span><span>($</span><span style="color:#bf616a;">headers</span><span>[&#39;</span><span style="color:#a3be8c;">X-Hub-Signature</span><span>&#39;] === $</span><span style="color:#bf616a;">our_signature</span><span>) {
+</span><span>        </span><span style="color:#96b5b4;">exec</span><span>(&#39;</span><span style="color:#a3be8c;">/path/to/your/script</span><span>&#39;);
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#96b5b4;">http_response_code</span><span>(</span><span style="color:#d08770;">200</span><span>);
+</span><span>
+</span><span style="color:#ab7967;">?&gt;
+</span></code></pre>
+<hr />
+<h2 id="update-site-source-script">Update Site Source Script</h2>
+<p>Now let's write the script for updating the website's source.</p>
+<p>Start with a shebang and changing directory to your website root.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span>!</span><span style="color:#bf616a;">#/bin/bash
+</span><span>
+</span><span style="color:#96b5b4;">cd</span><span> /var/www/html/
+</span></code></pre>
+<p>Remove all of your current source files <strong>except the webhook folder as well as any other files which are not in your repository</strong>.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">cp -r</span><span> webhooks /tmp
+</span><span style="color:#65737e;"># cp (-r) any_other_files_and_directories_you_want_to_keep /tmp
+</span><span style="color:#bf616a;">rm -rf </span><span>*
+</span><span style="color:#bf616a;">mv -r</span><span> /tmp/webhooks .
+</span><span style="color:#65737e;"># mv (-r) /tmp/other_files .
+</span></code></pre>
+<p>Now with the website root cleaned, clone your repo and <code>cd</code> into it.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">git</span><span> clone https://github.com/your_name/your_repo.git
+</span><span style="color:#96b5b4;">cd</span><span> your_repo
+</span></code></pre>
+<p>Copy the new source files into the site root. Yours may be inside a build folder e.g <code>build</code>, <code>public</code>, <code>dist</code>, etc. Then delete the cloned repo.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">mv -f</span><span> build/* ../
+</span><span style="color:#96b5b4;">cd</span><span> ../
+</span><span style="color:#bf616a;">rm -rf</span><span> your_repo
+</span></code></pre>
+<p>Save this script somewhere the web user can access, I'm choosing <code>/var/www/scripts/get_site_source.sh</code>, then ensuring that it is executable.</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#bf616a;">sudo</span><span> chmod +x /var/www/scripts/get_site_source.sh
+</span></code></pre>
+<p>The finished script should look like this:</p>
+<pre data-lang="bash" style="background-color:#2b303b;color:#c0c5ce;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#65737e;">#!/bin/bash
+</span><span style="color:#96b5b4;">cd</span><span> /var/www/html
+</span><span style="color:#bf616a;">cp -r</span><span> webhooks /tmp
+</span><span style="color:#bf616a;">rm -rf </span><span>*
+</span><span style="color:#bf616a;">mv -r</span><span> /tmp/webhooks .
+</span><span style="color:#bf616a;">git</span><span> clone https://github.com/your_name/your_repo.git
+</span><span style="color:#96b5b4;">cd</span><span> your_repo
+</span><span style="color:#bf616a;">mv -f</span><span> build/* ../
+</span><span style="color:#96b5b4;">cd</span><span> ../
+</span><span style="color:#bf616a;">rm -rf</span><span> your_repo
+</span></code></pre>
+<p>Now edit <code>webhook.php</code> and change the bash script location to where you just saved it.</p>
+<pre data-lang="php" style="background-color:#2b303b;color:#c0c5ce;" class="language-php "><code class="language-php" data-lang="php"><span>exec(&#39;/path/to/your/script&#39;);
+</span></code></pre>
+<p>↓</p>
+<pre data-lang="php" style="background-color:#2b303b;color:#c0c5ce;" class="language-php "><code class="language-php" data-lang="php"><span>exec(&#39;/var/www/scripts/get_site_source.sh&#39;);
+</span></code></pre>
+<hr />
+<h2 id="repository-settings">Repository Settings</h2>
+<p>The last step is to tell Github that you want them to send POST requests to your webhook. Open up your repository and go to settings. Navigate to the <code>Webhooks</code> tab on the left. Click on <code>Add webhook</code> in the top left.</p>
+<p>Enter your details like so and click <code>Add webhook</code> to save.</p>
+<p><img src="http://freddycansick.co.uk/blog/github-webhooks/github-webhook-example.png" alt="An example Github webhook." /></p>
+<p>Github will now send a test ping to your site to check if it's responsive.</p>
+<hr />
+<h2 id="epilogue">Epilogue</h2>
+<p>Any subsequent pushes you make to the respository will now notify your webhook, initiating the script and updating your page's source automatically!</p>
+<p>Thank you for reading my first blog post, I'm endeavouring to write these for computer science related activities which I think could do with a nice tutorial or just a bit more explanation.</p>
+<p>If you enjoyed this blog post please consider checking out <a href="/blog">some others</a>!</p>
+
+</div>
+
+    </div>
+  </section>
+</body>
+
+</html>
