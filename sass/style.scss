@@ -1,9 +1,13 @@
+@import url("syntax-theme-dark.css") (prefers-color-scheme: dark);
+@import url("syntax-theme-light.css") (prefers-color-scheme: light);
+
 body {
   font-family: 'Courier New', Courier, monospace;
 }
 
 h1 {
   color: green;
+  font-size: xx-large;
 }
 
 h2 {
@@ -17,4 +21,14 @@ h2 {
 .centered-container {
   margin-left: 20vw;
   margin-right: 20vw;
+}
+
+.centered-blog-image-medium {
+  object-fit: contain;
+  max-width: 55vw;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  margin-right: 5vw;
+  margin-left: 5vw;
 }

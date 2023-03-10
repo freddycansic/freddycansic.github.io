@@ -196,7 +196,7 @@ The last step is to tell Github that you want them to send POST requests to your
 
 Enter your details like so and click `Add webhook` to save.
 
-![An example Github webhook.](github-webhook-example.png)
+<img class=centered-blog-image-medium src="github-webhook-example.png" alt="An example Github webhook.">
 
 Github will now send a test ping to your site to check if it's responsive.
 
