@@ -1,5 +1,5 @@
 +++
-title = "Continuously Deploy Your Website using Github Webhooks"
+title = "Continuously Deploy your Website using Github Webhooks"
 description = "Learn how to use Github Webhooks to update your website's source files after a repository push."
 date = 2023-03-10
 +++
@@ -196,7 +196,7 @@ The last step is to tell Github that you want them to send POST requests to your
 
 Enter your details like so and click `Add webhook` to save.
 
-<img class=centered-blog-image-medium src="github-webhook-example.png" alt="An example Github webhook.">
+<a href=/blog/github-webhooks/github-webhook-example.png><img class=centered-blog-image-medium src="github-webhook-example.png" alt="An example Github webhook. Click to enlarge."></a>
 
 Github will now send a test ping to your site to check if it's responsive.
 

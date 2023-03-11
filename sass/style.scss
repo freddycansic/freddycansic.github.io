@@ -1,17 +1,106 @@
 @import url("syntax-theme-dark.css") (prefers-color-scheme: dark);
 @import url("syntax-theme-light.css") (prefers-color-scheme: light);
+@import url("default_margin_borders.css");
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+$dark_mode_background: #121212;
+$light_mode_background: #F5F5F5;
+
+@media (prefers-color-scheme: light) {
+  body {
+    background-color: $light_mode_background;
+    color: black;
+  }
+  
+  h1 {
+    color: green;
+    font-size: xx-large;
+  }
+  
+  h2, h3, h4, h5, h6 {
+    color: darken(green, 10%)
+  }
+
+  footer, nav {
+    background-color: darken($light_mode_background, 7%);
+  }
+
+  blockquote {
+    border-left-color: darken($light_mode_background, 7%);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: $dark_mode_background;
+    color: white;
+  }
+
+  h1 {
+    color: lighten(green, 65%);
+    font-size: xx-large;
+  }
+  
+  h2, h3, h4, h5, h6 {
+    color: lighten(green, 60%)
+  }
+
+  a {
+    color: lighten(pink, 5%);
+  }
+
+  footer, nav {
+    background-color: darken($dark_mode_background, 2%);
+  }
+
+  blockquote {
+    border-left-color: lighten($dark_mode_background, 10%);
+  }
+}
+
+html {
+  height: 100%;
+}
 
 body {
   font-family: 'Courier New', Courier, monospace;
+
+  min-height: 100%;
+  
+  display: flex;
+  flex-direction: column;
 }
 
-h1 {
-  color: green;
-  font-size: xx-large;
+.body-content {
+  padding: 8px;
 }
 
-h2 {
-  color: darken(green, 10%)
+nav {
+  padding: 8px;
+}
+
+footer {
+  margin-top: auto;
+  height: 2.5em;
+  padding: 0.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+blockquote {
+  border-left-width: 5px;
+  border-left-style: solid;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+}
+
+blockquote > p {
+  margin: 0;
 }
 
 .description {
@@ -24,11 +113,22 @@ h2 {
 }
 
 .centered-blog-image-medium {
-  object-fit: contain;
-  max-width: 45vw;
-  max-height: 100%;
+  max-width: 60vw;
   width: auto;
   height: auto;
-  margin-right: 7.5vw;
-  margin-left: 7.5vw;
+}
+
+pre {
+  white-space: pre-wrap;  
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+
+.z-code {
+  border-radius: 4px;
+  padding-left: 5px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
