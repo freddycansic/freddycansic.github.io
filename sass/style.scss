@@ -32,6 +32,7 @@ $light_mode_background: #F5F5F5;
   blockquote {
     border-left-color: darken($light_mode_background, 7%);
   }
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -39,7 +40,7 @@ $light_mode_background: #F5F5F5;
     background-color: $dark_mode_background;
     color: white;
   }
-
+  
   h1 {
     color: lighten(green, 65%);
     font-size: xx-large;
@@ -48,17 +49,25 @@ $light_mode_background: #F5F5F5;
   h2, h3, h4, h5, h6 {
     color: lighten(green, 60%)
   }
-
+  
   a {
     color: lighten(pink, 5%);
   }
-
+  
   footer, nav {
     background-color: darken($dark_mode_background, 2%);
   }
-
+  
   blockquote {
     border-left-color: lighten($dark_mode_background, 10%);
+  }
+  
+  :not(pre) code {
+    background-color: lighten($dark_mode_background, 10%);
+  }
+
+  pre code {
+    background-color: inherit;
   }
 }
 
@@ -114,6 +123,13 @@ blockquote > p {
 .centered-container {
   margin-left: 20vw;
   margin-right: 20vw;
+}
+
+@media screen and (max-width: 768px) {
+  .centered-container {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .centered-blog-image-medium {

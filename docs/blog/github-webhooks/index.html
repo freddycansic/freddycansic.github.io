@@ -36,8 +36,8 @@
   <nav>
     Freddy Cansick | 
     <a href="/">Home</a> |
-    <a href="/about">About</a> |
-    <a href="/blog">Blog</a>
+    <a href="/blog">Blog</a> |
+    <a href="/about">About</a>
   </nav>
   
   <div class="body-content">
@@ -56,7 +56,7 @@
   </p>
   <h2 id="introduction">Introduction</h2>
 <p>In modern day software development continuous integration and deployment are becoming increasingly important for an efficient workflow. In this tutorial you will be learning how to set up continuous deployment to update your website source files after a repository push using Github Webhooks.</p>
-<p>Webhooks are callbacks which are triggered by web events. In the case of Github, an event can be a repository push, pull, merge etc. We will be coding a simple PHP script to react to a repository push, which will then pull down the changes and organise them neatly in the web root.</p>
+<p>Webhooks are callbacks that are triggered by web events. In the case of GitHub, an event can be a repository push, pull, merge, and more. We will create a simple PHP script to respond to a repository push event, which will then pull down changes from the repository and organize them neatly in the web root.</p>
 <hr />
 <p>Assuming you have already set up your web hosting, navigate to your web root. By default it is stored at <code>/var/www/html</code>.</p>
 <pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-support z-function z-cd z-shell">cd</span></span><span class="z-meta z-function-call z-arguments z-shell"> /var/www/html</span>
@@ -69,10 +69,10 @@
 </span></code></pre>
 <p>Now create a folder to store the webhook, and the webhook itself.</p>
 <pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">mkdir</span></span><span class="z-meta z-function-call z-arguments z-shell"> webhooks</span>
-<span class="z-meta z-function-call z-shell"><span class="z-support z-function z-cd z-shell">cd</span></span><span class="z-meta z-function-call z-arguments z-shell"> webooks</span>
+<span class="z-meta z-function-call z-shell"><span class="z-support z-function z-cd z-shell">cd</span></span><span class="z-meta z-function-call z-arguments z-shell"> webhooks</span>
 <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">touch</span></span><span class="z-meta z-function-call z-arguments z-shell"> webhook.php</span>
 </span></code></pre>
-<p>Open up the webhook in your editor of choice. Of course I will be choosing <code>ed</code>, the world leading standard in text editors for productivity, ease of use and aesthetics. As a wise man once said:</p>
+<p>Open up the webhook in your editor of choice. Of course I will be choosing <code>ed</code>, the world’s leading standard in text editors for productivity, ease of use and aesthetics. As a wise man once said:</p>
 <blockquote>
 <p>The most user-hostile editor ever created. -Peter H. Salus</p>
 </blockquote>
@@ -81,7 +81,7 @@
 <hr />
 <h2 id="webhook">Webhook</h2>
 <p>First of all, Github uses a shared secret to sign their POST requests to your webhook. This verifies that they are genuine and that the message has not been intercepted by a bad actor.</p>
-<p>Your secret can be anything you want, I would recommend a large string of random numbers, letters and characters. Make sure not to memorise this as it could potentially be prised out of you in an interrogation setting. Don’t trust anyone. Especially yourself. The human mind is a fragile thing.</p>
+<p>Your secret can be anything you want, I would recommend a large string of random numbers, letters and characters.</p>
 <p>After the <code>&lt;?php</code> opening tag, assign your secret to a variable named <code>$secret</code>. In my example I will use “<code>mydeepestdarkestsecret</code>”. This will be used later on for hashing the payload and checking against Github’s signature.</p>
 <pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic"><span class="z-meta z-embedded z-block z-php"><span class="z-punctuation z-section z-embedded z-begin z-php">&lt;?php</span></span><span class="z-meta z-embedded z-block z-php"><span class="z-source z-php">
 
@@ -96,7 +96,7 @@ $event = $headers[&#39;X-Github-Event&#39;];
     // update website source
 }
 </span></span></code></pre>
-<p>If we recieved a <code>push</code> event then the next step is to compare our hashed payload with Github’s signature.</p>
+<p>If we recieve a <code>push</code> event then the next step is to compare our hashed payload with Github’s signature.</p>
 <p>First obtain the request payload, then hash it using the <code>secret</code>.</p>
 <pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic">$payload = file_get_contents(&#39;php://input&#39;);
 $our_signature = &#39;sha1=&#39; . hash_hmac(&#39;sha1&#39;, $payload, $secret);
@@ -133,16 +133,16 @@ $our_signature = &#39;sha1=&#39; . hash_hmac(&#39;sha1&#39;, $payload, $secret);
 <h2 id="update-site-source-script">Update Site Source Script</h2>
 <p>Now let’s write the script for updating the website’s source.</p>
 <p>Start with a shebang and changing directory to your website root.</p>
-<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-punctuation z-definition z-history z-shell">!</span><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">#/bin/bash</span></span>
-
+<pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell">!/bin/bash</span><span class="z-comment z-line z-number-sign z-shell">
+</span>
 <span class="z-meta z-function-call z-shell"><span class="z-support z-function z-cd z-shell">cd</span></span><span class="z-meta z-function-call z-arguments z-shell"> /var/www/html/</span>
 </span></code></pre>
-<p>Remove all of your current source files <strong>except the webhook folder as well as any other files which are not in your repository</strong>.</p>
+<p>Remove all of your current source files <strong>except the webhook folder as well as any other files which are not in your repository</strong>. This will ensure that no files which may have made their way into this folder are served along with your site.</p>
 <pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">cp</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>r</span> webhooks /tmp</span>
 <span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> cp (-r) any_other_files_and_directories_you_want_to_keep /tmp</span><span class="z-comment z-line z-number-sign z-shell">
 </span><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">rm</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>rf</span> <span class="z-keyword z-operator z-regexp z-quantifier z-shell">*</span></span>
 <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">mv</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>r</span> /tmp/webhooks .</span>
-<span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> mv (-r) /tmp/other_files .</span><span class="z-comment z-line z-number-sign z-shell">
+<span class="z-comment z-line z-number-sign z-shell"><span class="z-punctuation z-definition z-comment z-begin z-shell">#</span></span><span class="z-comment z-line z-number-sign z-shell"> mv (-r) /tmp/any_other_files_and_directories_you_want_to_keep .</span><span class="z-comment z-line z-number-sign z-shell">
 </span></span></code></pre>
 <p>Now with the website root cleaned, clone your repo and <code>cd</code> into it.</p>
 <pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">git</span></span><span class="z-meta z-function-call z-arguments z-shell"> clone https://github.com/your_name/your_repo.git</span>
@@ -153,7 +153,7 @@ $our_signature = &#39;sha1=&#39; . hash_hmac(&#39;sha1&#39;, $payload, $secret);
 <span class="z-meta z-function-call z-shell"><span class="z-support z-function z-cd z-shell">cd</span></span><span class="z-meta z-function-call z-arguments z-shell"> ../</span>
 <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">rm</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>rf</span> your_repo</span>
 </span></code></pre>
-<p>Save this script somewhere the web user can access, I’m choosing <code>/var/www/scripts/get_site_source.sh</code>, then ensuring that it is executable.</p>
+<p>Save this script somewhere the web user can access, I’m choosing <code>/var/www/scripts/get_site_source.sh</code>. Now make the script executable.</p>
 <pre data-lang="bash" class="language-bash z-code"><code class="language-bash" data-lang="bash"><span class="z-source z-shell z-bash"><span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">sudo</span></span><span class="z-meta z-function-call z-arguments z-shell"> chmod +x /var/www/scripts/get_site_source.sh</span>
 </span></code></pre>
 <p>The finished script should look like this:</p>
@@ -168,7 +168,7 @@ $our_signature = &#39;sha1=&#39; . hash_hmac(&#39;sha1&#39;, $payload, $secret);
 <span class="z-meta z-function-call z-shell"><span class="z-support z-function z-cd z-shell">cd</span></span><span class="z-meta z-function-call z-arguments z-shell"> ../</span>
 <span class="z-meta z-function-call z-shell"><span class="z-variable z-function z-shell">rm</span></span><span class="z-meta z-function-call z-arguments z-shell"><span class="z-variable z-parameter z-option z-shell"><span class="z-punctuation z-definition z-parameter z-shell"> -</span>rf</span> your_repo</span>
 </span></code></pre>
-<p>Now edit <code>webhook.php</code> and change the bash script location to where you just saved it.</p>
+<p>Edit <code>webhook.php</code> and change the bash script location to where you just saved it.</p>
 <pre data-lang="php" class="language-php z-code"><code class="language-php" data-lang="php"><span class="z-embedding z-php"><span class="z-text z-html z-basic">exec(&#39;/path/to/your/script&#39;);
 </span></span></code></pre>
 <p>↓</p>
@@ -176,14 +176,14 @@ $our_signature = &#39;sha1=&#39; . hash_hmac(&#39;sha1&#39;, $payload, $secret);
 </span></span></code></pre>
 <hr />
 <h2 id="repository-settings">Repository Settings</h2>
-<p>The last step is to tell Github that you want them to send POST requests to your webhook. Open up your repository and go to settings. Navigate to the <code>Webhooks</code> tab on the left. Click on <code>Add webhook</code> in the top left.</p>
+<p>The last step is to notify Github that you want them to send <code>POST</code> requests to your webhook. Open up your repository and go to settings. Navigate to the <code>Webhooks</code> tab on the left. Click on <code>Add webhook</code> in the top left.</p>
 <p>Enter your details like so and click <code>Add webhook</code> to save.</p>
 <p><a href=/blog/github-webhooks/github-webhook-example.png><img class=centered-blog-image-medium src="github-webhook-example.png" alt="An example Github webhook. Click to enlarge."></a></p>
 <p>Github will now send a test ping to your site to check if it’s responsive.</p>
 <hr />
 <h2 id="epilogue">Epilogue</h2>
 <p>Any subsequent pushes you make to the respository will now notify your webhook, initiating the script and updating your page’s source automatically!</p>
-<p>Thank you for reading my first blog post, I’m endeavouring to write these for computer science related activities which I think could do with a nice tutorial or just a bit more explanation.</p>
+<p>Thank you for reading my first blog post, I’m endeavouring to write these for computer science related activities which I think could do with a tutorial or just a bit more explanation.</p>
 <p>If you enjoyed this blog post please consider checking out <a href="/blog">some others</a>!</p>
 
 </div>

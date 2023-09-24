@@ -8,7 +8,7 @@ date = 2023-03-10
 
 In modern day software development continuous integration and deployment are becoming increasingly important for an efficient workflow. In this tutorial you will be learning how to set up continuous deployment to update your website source files after a repository push using Github Webhooks.
 
-Webhooks are callbacks which are triggered by web events. In the case of Github, an event can be a repository push, pull, merge etc. We will be coding a simple PHP script to react to a repository push, which will then pull down the changes and organise them neatly in the web root.
+Webhooks are callbacks that are triggered by web events. In the case of GitHub, an event can be a repository push, pull, merge, and more. We will create a simple PHP script to respond to a repository push event, which will then pull down changes from the repository and organize them neatly in the web root.
 
 ---
 
@@ -31,11 +31,11 @@ Now create a folder to store the webhook, and the webhook itself.
 
 ```bash
 mkdir webhooks
-cd webooks
+cd webhooks
 touch webhook.php
 ```
 
-Open up the webhook in your editor of choice. Of course I will be choosing `ed`, the world leading standard in text editors for productivity, ease of use and aesthetics. As a wise man once said:
+Open up the webhook in your editor of choice. Of course I will be choosing `ed`, the world's leading standard in text editors for productivity, ease of use and aesthetics. As a wise man once said:
 > The most user-hostile editor ever created. -Peter H. Salus
 
 ```bash
@@ -48,7 +48,7 @@ ed webhook.php
 
 First of all, Github uses a shared secret to sign their POST requests to your webhook. This verifies that they are genuine and that the message has not been intercepted by a bad actor.
 
-Your secret can be anything you want, I would recommend a large string of random numbers, letters and characters. Make sure not to memorise this as it could potentially be prised out of you in an interrogation setting. Don't trust anyone. Especially yourself. The human mind is a fragile thing.
+Your secret can be anything you want, I would recommend a large string of random numbers, letters and characters.
 
 After the `<?php` opening tag, assign your secret to a variable named `$secret`. In my example I will use "`mydeepestdarkestsecret`". This will be used later on for hashing the payload and checking against Github's signature.
 
@@ -73,7 +73,7 @@ if ($event == 'push') {
 }
 ```
 
-If we recieved a `push` event then the next step is to compare our hashed payload with Github's signature.
+If we recieve a `push` event then the next step is to compare our hashed payload with Github's signature.
 
 First obtain the request payload, then hash it using the `secret`.
 
@@ -128,19 +128,19 @@ Now let's write the script for updating the website's source.
 Start with a shebang and changing directory to your website root.
 
 ```bash
-!#/bin/bash
+#!/bin/bash
 
 cd /var/www/html/
 ```
 
-Remove all of your current source files **except the webhook folder as well as any other files which are not in your repository**.
+Remove all of your current source files **except the webhook folder as well as any other files which are not in your repository**. This will ensure that no files which may have made their way into this folder are served along with your site.
 
 ```bash
 cp -r webhooks /tmp
 # cp (-r) any_other_files_and_directories_you_want_to_keep /tmp
 rm -rf *
 mv -r /tmp/webhooks .
-# mv (-r) /tmp/other_files .
+# mv (-r) /tmp/any_other_files_and_directories_you_want_to_keep .
 ```
 
 Now with the website root cleaned, clone your repo and `cd` into it.
@@ -158,7 +158,7 @@ cd ../
 rm -rf your_repo
 ```
 
-Save this script somewhere the web user can access, I'm choosing `/var/www/scripts/get_site_source.sh`, then ensuring that it is executable.
+Save this script somewhere the web user can access, I'm choosing `/var/www/scripts/get_site_source.sh`. Now make the script executable.
 
 ```bash
 sudo chmod +x /var/www/scripts/get_site_source.sh
@@ -178,7 +178,7 @@ cd ../
 rm -rf your_repo
 ```
 
-Now edit `webhook.php` and change the bash script location to where you just saved it.
+Edit `webhook.php` and change the bash script location to where you just saved it.
 
 ```php
 exec('/path/to/your/script');
@@ -192,7 +192,7 @@ exec('/var/www/scripts/get_site_source.sh');
 
 ## Repository Settings
 
-The last step is to tell Github that you want them to send POST requests to your webhook. Open up your repository and go to settings. Navigate to the `Webhooks` tab on the left. Click on `Add webhook` in the top left.
+The last step is to notify Github that you want them to send `POST` requests to your webhook. Open up your repository and go to settings. Navigate to the `Webhooks` tab on the left. Click on `Add webhook` in the top left.
 
 Enter your details like so and click `Add webhook` to save.
 
@@ -206,6 +206,6 @@ Github will now send a test ping to your site to check if it's responsive.
 
 Any subsequent pushes you make to the respository will now notify your webhook, initiating the script and updating your page's source automatically!
 
-Thank you for reading my first blog post, I'm endeavouring to write these for computer science related activities which I think could do with a nice tutorial or just a bit more explanation.
+Thank you for reading my first blog post, I'm endeavouring to write these for computer science related activities which I think could do with a tutorial or just a bit more explanation.
 
 If you enjoyed this blog post please consider checking out [some others](/blog)!
