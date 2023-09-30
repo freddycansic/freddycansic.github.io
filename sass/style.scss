@@ -4,7 +4,11 @@
 
 @font-face {
   font-family: "Cascadia Code";
-  src: local("CascadiaCode"), url("fonts/CascadiaCode.ttf") format("ttf")
+  src: 
+    local("CascadiaCode"), 
+    url("fonts/CascadiaCode.ttf") format("ttf"),
+    url("fonts/CascadiaCode-Regular.otf") format("otf"),
+    url("fonts/CascadiaCode.woff2") format("woff2"),
 }
 
 * {
