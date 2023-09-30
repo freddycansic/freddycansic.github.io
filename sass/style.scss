@@ -2,27 +2,24 @@
 @import url("syntax-theme-light.css") (prefers-color-scheme: light);
 @import url("default_margin_borders.css");
 
+@font-face {
+  font-family: "Cascadia Code";
+  src: local("CascadiaCode"), url("fonts/CascadiaCode.ttf") format("ttf")
+}
+
 * {
   margin: 0;
   padding: 0;
 }
 
-$dark_mode_background: #121212;
+$dark_mode_background: #1d1d1d;
 $light_mode_background: #F5F5F5;
+$primary_color: rgb(60, 152, 199);
 
 @media (prefers-color-scheme: light) {
   body {
     background-color: $light_mode_background;
     color: black;
-  }
-  
-  h1 {
-    color: green;
-    font-size: xx-large;
-  }
-  
-  h2, h3, h4, h5, h6 {
-    color: darken(green, 10%)
   }
 
   footer, nav {
@@ -33,6 +30,10 @@ $light_mode_background: #F5F5F5;
     border-left-color: darken($light_mode_background, 7%);
   }
 
+  // inline code snippets and anchors which are not in the nav bar or don't have an image as a child (image link)
+  code:not(pre code), a:not(nav a):not(:has(img))  {
+    background-color: darken($light_mode_background, 5%);
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,20 +41,7 @@ $light_mode_background: #F5F5F5;
     background-color: $dark_mode_background;
     color: white;
   }
-  
-  h1 {
-    color: lighten(green, 65%);
-    font-size: xx-large;
-  }
-  
-  h2, h3, h4, h5, h6 {
-    color: lighten(green, 60%)
-  }
-  
-  a {
-    color: lighten(pink, 5%);
-  }
-  
+
   footer, nav {
     background-color: darken($dark_mode_background, 2%);
   }
@@ -62,13 +50,25 @@ $light_mode_background: #F5F5F5;
     border-left-color: lighten($dark_mode_background, 10%);
   }
   
-  :not(pre) code {
-    background-color: lighten($dark_mode_background, 10%);
+  code:not(pre code), a:not(nav a):not(:has(img))  {
+    background-color: lighten($dark_mode_background, 5%);
   }
+}
 
-  pre code {
-    background-color: inherit;
-  }
+// hyperlinks and inline code blocks
+code:not(pre code), a:not(nav a):not(:has(img)) {
+  border-radius: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+a:not(nav a) {
+  font-weight: bolder;
+}
+
+a {
+  text-decoration: none;
+  color: $primary_color
 }
 
 html {
@@ -76,12 +76,22 @@ html {
 }
 
 body {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Cascadia Code";
+  font-weight: 300;
 
   min-height: 100%;
   
   display: flex;
   flex-direction: column;
+}
+
+h1 {
+  color: $primary_color;
+  font-size: xx-large;
+}
+
+h2, h3, h4, h5, h6 {
+  color: lighten($primary_color, 20%);
 }
 
 .body-content {
@@ -101,10 +111,6 @@ footer {
   align-items: center;
 }
 
-a {
-  text-decoration: none;
-}
-
 blockquote {
   border-left-width: 5px;
   border-left-style: solid;
@@ -121,21 +127,14 @@ blockquote > p {
 }
 
 .centered-container {
-  margin-left: 20vw;
-  margin-right: 20vw;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
-@media screen and (max-width: 768px) {
-  .centered-container {
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-
-.centered-blog-image-medium {
-  max-width: 60vw;
-  width: auto;
-  height: auto;
+.centered-blog-image-large {
+  // lines up the image with the --- bar in markdown, check blog to see
+  max-width: 945px;
+  margin: 0 auto;
 }
 
 pre {
