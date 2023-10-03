@@ -59,6 +59,12 @@ $primary_color: rgb(60, 152, 199);
   }
 }
 
+@media (max-width: 768px) {
+  body {
+    font-size: 16px
+  }
+}
+
 // hyperlinks and inline code blocks
 code:not(pre code), a:not(nav a):not(:has(img)) {
   border-radius: 5px;
