@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;  
+}
+
 @import url("syntax-theme-dark.css") (prefers-color-scheme: dark);
 @import url("syntax-theme-light.css") (prefers-color-scheme: light);
 @import url("default_margin_borders.css");
@@ -9,11 +14,6 @@
     url("fonts/CascadiaCode.ttf") format("ttf"),
     url("fonts/CascadiaCode-Regular.otf") format("otf"),
     url("fonts/CascadiaCode.woff2") format("woff2"),
-}
-
-* {
-  margin: 0;
-  padding: 0;
 }
 
 $dark_mode_background: #1d1d1d;
@@ -65,6 +65,12 @@ $primary_color: rgb(60, 152, 199);
   }
 }
 
+// separator between nav bar elements
+nav *:not(:last-child) {
+  padding-right: 9px;
+  border-right: solid 1px black;
+}
+
 // hyperlinks and inline code blocks
 code:not(pre code), a:not(nav a):not(:has(img)) {
   border-radius: 5px;
@@ -81,12 +87,16 @@ a {
   color: $primary_color
 }
 
+a:hover {
+  font-weight: 900;
+}
+
 html {
   height: 100%;
 }
 
 body {
-  font-family: "Cascadia Code";
+  font-family: "Cascadia Code", serif;
   font-weight: 300;
 
   min-height: 100%;

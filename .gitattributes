@@ -1,4 +1,2 @@
 static linguist-detectable=false
-public/syntax-theme-* linguist-detectable=false
-template linguist-detectable=false
-public linguist-detectable=false
+docs linguist-detectable=false
