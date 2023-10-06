@@ -1,11 +1,8 @@
-* {
-  margin: 0;
-  padding: 0;  
-}
+@import url("normalize.css");
+@import url("dark.css") (prefers-color-scheme: dark);
+@import url("light.css") (prefers-color-scheme: light);
 
-@import url("syntax-theme-dark.css") (prefers-color-scheme: dark);
-@import url("syntax-theme-light.css") (prefers-color-scheme: light);
-@import url("default_margin_borders.css");
+@import url("mobile.css") screen and (max-width: 500px);
 
 @font-face {
   font-family: "Cascadia Code";
@@ -16,59 +13,11 @@
     url("fonts/CascadiaCode.woff2") format("woff2"),
 }
 
-$dark_mode_background: #1d1d1d;
-$light_mode_background: #F5F5F5;
 $primary_color: rgb(60, 152, 199);
-
-@media (prefers-color-scheme: light) {
-  body {
-    background-color: $light_mode_background;
-    color: black;
-  }
-
-  footer, nav {
-    background-color: darken($light_mode_background, 7%);
-  }
-
-  blockquote {
-    border-left-color: darken($light_mode_background, 7%);
-  }
-
-  // inline code snippets and anchors which are not in the nav bar or don't have an image as a child (image link)
-  code:not(pre code), a:not(nav a):not(:has(img))  {
-    background-color: darken($light_mode_background, 5%);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: $dark_mode_background;
-    color: white;
-  }
-
-  footer, nav {
-    background-color: darken($dark_mode_background, 2%);
-  }
-  
-  blockquote {
-    border-left-color: lighten($dark_mode_background, 10%);
-  }
-  
-  code:not(pre code), a:not(nav a):not(:has(img))  {
-    background-color: lighten($dark_mode_background, 5%);
-  }
-}
-
-@media (max-width: 768px) {
-  body {
-    font-size: 16px
-  }
-}
 
 // separator between nav bar elements
 nav *:not(:last-child) {
   padding-right: 9px;
-  border-right: solid 1px black;
 }
 
 // hyperlinks and inline code blocks

@@ -1,0 +1,28 @@
+// color theme for light mode
+
+@import url("syntax-theme-light.css");
+
+$light_mode_background: #F5F5F5;
+
+body {
+  background-color: $light_mode_background;
+  color: black;
+}
+
+footer, nav {
+  background-color: darken($light_mode_background, 7%);
+}
+
+blockquote {
+  border-left-color: darken($light_mode_background, 7%);
+}
+
+// inline code snippets and anchors which are not in the nav bar or don't have an image as a child (image link)
+code:not(pre code), a:not(nav a):not(:has(img))  {
+  background-color: darken($light_mode_background, 5%);
+}
+
+// separator between nav bar elements
+nav *:not(:last-child) {
+  border-right: solid 1px black;
+}
