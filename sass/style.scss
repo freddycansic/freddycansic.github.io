@@ -63,9 +63,9 @@ h2, h3, h4, h5, h6 {
   color: lighten($primary_color, 20%);
 }
 
-.body-content {
-  padding: 8px;
-}
+// .body-content {
+//   padding: 8px;
+// }
 
 nav {
   padding: 8px;
@@ -98,6 +98,8 @@ blockquote > p {
 .centered-container {
   max-width: 960px;
   margin: 0 auto;
+  overflow: auto;
+  padding: 0.5em;
 }
 
 .centered-blog-image-large {
