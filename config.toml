@@ -1,4 +1,4 @@
-base_url = "https://freddycansick.co.uk/"
+base_url = "https://freddycansic.github.io/"
 compile_sass = true
 build_search_index = false
 default_language = "en"
